@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage ('clone repo') {
+            steps {
+                checkout scm
+                sh 'ls*'
+            }
+            stage ('build image') {
+                steps {
+                    sh 'docker build -t sameekhan13/jenkinsfile:$BUILD_NUMBER ./sameekhan13-patch-1/'
+                }
+                stage ('docker_login'){
+                    steps {
+                        sh 'echo $DOCKERHUB_CREDS_PSM | docker login -u $DOCKERHUB_CRED_USR --password-stdin'
+                    }  
+                stage ('dockerpush') {
+                    sh 'docker push sameekhan13/jenkinsfile:$BUILD_NUMBER '
+                }
+                }      
+                }
+            }        }
+    }
+        }
+    }
+}
